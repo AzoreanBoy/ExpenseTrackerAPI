@@ -25,7 +25,7 @@ class SubCategory(models.Model):
     description = models.TextField(blank=True)
     category = models.ForeignKey(Category, related_name='subcategories', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
-    owner_id = models.ForeignKey('auth.User', related_name='owned_by', on_delete=models.CASCADE, null=True)
+    owner_id = models.ForeignKey('auth.User', related_name='owned_by', on_delete=models.DO_NOTHING, null=True, blank=True)
     
     class Meta:
         ordering = ['name']
@@ -38,10 +38,11 @@ class SubCategory(models.Model):
 
 class Expense(models.Model):
     amount = models.DecimalField(max_digits=10, decimal_places=2)
+    title = models.CharField(max_length=100)
     description = models.TextField(blank=True)
     date = models.DateField()
-    category = models.ForeignKey(Category, related_name='category', on_delete=models.CASCADE)
-    subcategory = models.ForeignKey(SubCategory, related_name='subcategory', on_delete=models.CASCADE, null=True, blank=True)
+    category = models.ForeignKey(Category, related_name='category', on_delete=models.DO_NOTHING)
+    subcategory = models.ForeignKey(SubCategory, related_name='subcategory', on_delete=models.DO_NOTHING, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     owner_id = models.ForeignKey('auth.User', related_name='expenses', on_delete=models.CASCADE, null=True)
 
